@@ -97,11 +97,11 @@
             <br>
             <b>Step 3:</b> Maximum zoom by cliking the plus on the bottom-right corner.Click on the obstructing object (tree/building) and enter the coordinates in the fields below.<br>
             <br>Street Coordinates(Lat):<br>
-            <input type="text" name="secondC1">
+            <input type="text" name="secondC1" id="secondC1">
             <br>
 
             Street Coordinates(Long):<br>
-            <input type="text" name="secondC2">
+            <input type="text" name="secondC2" id="secondC2">
             <br><br>
             <input type="submit" value="Submit">
             <br><br>
@@ -120,7 +120,17 @@
 // feature. People can enter geographical searches. The search box will return a
 // pick list containing a mix of places and predicted search terms.
 
+
+
+
+function updateMarkerAddress(str) {
+  console.log('updatemarkeraddress'+str);
+
+  //document.getElementById('address').innerHTML = str;
+}
+
 function initAutocomplete() {
+  var marker;
   var geocoder = new google.maps.Geocoder();
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -33.8688, lng: 151.2195},
@@ -132,8 +142,9 @@ function initAutocomplete() {
       geocoder.geocode( { 'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           map.setCenter(results[0].geometry.location);
-          var marker = new google.maps.Marker({
+          marker = new google.maps.Marker({
               map: map,
+              draggable: true,
               position: results[0].geometry.location
 
           });
@@ -145,6 +156,18 @@ function initAutocomplete() {
   document.getElementById('address_field').value = address;
   document.getElementById('firstC1').value = results[0].geometry.location.lat();
   document.getElementById('firstC2').value = results[0].geometry.location.lng();
+
+
+
+
+  google.maps.event.addListener(marker, 'dragend', function() {
+    //updateMarkerStatus('Drag ended');
+    console.log('dragend');
+    document.getElementById('secondC1').value = marker.getPosition().lat();
+    document.getElementById('secondC2').value = marker.getPosition().lng();
+    updateMarkerAddress(marker.getPosition());
+    ///geocodePosition(marker.getPosition());
+  });
  });
         } else {
           alert("Geocode was not successful for the following reason: " + status);
