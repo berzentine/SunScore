@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+    div.box { background: #EEE; height: 100%; width: 100%; }
+    div.div1{background: #999; float: left; height: 100%; width: 300px; }
+    div.div2{ background: #666; height: 100%; }
+    div.clear { clear: both; height: 1px; overflow: hidden; font-size:0pt; margin-top: -1px; }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+      form {
+        margin: 10px;
+
+      }
+.controls {
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 300px;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+.pac-container {
+  font-family: Roboto;
+}
+
+#type-selector {
+  color: #fff;
+  background-color: #4d90fe;
+  padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+    </style>
+    <title>Task 1</title>
+    <style>
+      #target {
+        width: 345px;
+      }
+    </style>
+  </head>
+  <body>
+  
+  
+  
+  <?php
+$servername = "localhost";
+$username = "root";
+$password = "worldpeace";
+$dbname = "ecodigs";
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "SELECT id, address FROM listings";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    echo "<table><tr><th>ID</th><th>Name</th></tr>";
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "<tr><td>".$row["id"]."</td><td>".$row["address"]." ".$row["address"]."</td></tr>";
+    }
+    echo "</table>";
+} else {
+    echo "0 results";
+}
+$conn->close();
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+  <!--  <input id="pac-input" class="controls" type="text" placeholder="Search Box">-->
+
+    <div class="box">
+       <div class="div1" id="form">
+       <form method="post" action="task1.php" margin-left:25px margin-top:0px>
+        
+           <br><br>
+
+             <b>Task 1: </b>Finding the distance of the obstruction from the house.<br>
+             <br>
+             <b>Instructions:</b><br>
+             <b>Step 1:</b> Drag the marker to the top corner facing the road, which is on the building entrance side. Click on the marker. The coordinates of the house are autofilled.<br>
+
+             House Coordinates(Lat):<br>
+             <input type="text" name="firstC1" id="firstC1">
+             <br>
+             House Coordinates(Long):<br>
+            <input type="text" name="firstC2" id="firstC2">
+            <br>
+            <br>
+            <b>Step 2:</b> Maximize zoom by clicking the plus on the bottom-right corner of the maps. Drag the marker on the <b>nearest</b> obstructing object (tree/building etc) which is right <b>in front of the house</b>. Click on the marker. <br>
+            Obstruction Coordinates(Lat):<br>
+            <input type="text" name="secondC1" id="secondC1">
+            <br>
+
+            Obstruction Coordinates(Long):<br>
+            <input type="text" name="secondC2" id="secondC2">
+            <br><br>
+            <button type="button" id='Calculate'>Calculate</button>
+            Answer
+            <input type="text" value="answer" id="answer">
+
+            <br><br>How dense (in terms of obstructions) is the area on the entrance side of the house?<br>
+            <input type="radio" name="front_dense" >Sparse(0-1)
+            <input type="radio" name="front_dense" >Middle(2-4)
+            <input type="radio" name="front_dense" >Dense(>3)
+
+            <br><br>How dense (in terms of obstructions) is the area on the back side the house?<br>
+            <input type="radio" name="back_dense" >Sparse(0-1)
+            <input type="radio" name="back_dense" >Middle(2-3)
+            <input type="radio" name="back_dense" >Dense(>3)
+            <br><br>
+            Are there any taller buildings on all adjacent sides of the building? If yes please mention N,S,E,W?
+            <input type="text" id="answer_NEWS">
+
+     </form>
+
+       </div>
+       <div class="div2" id="map"></div>
+       <div class="clear">
+
+    </div>
+
+
+    <script>
+    document.getElementById("Calculate").onclick = function() {updateanswer()};
+
+
+
+      function updateanswer() {
+        console.log('updateanswer');
+        var lat1 = document.getElementById('firstC1').value;
+        var lon1 = document.getElementById('firstC2').value;
+        var lat2 = document.getElementById('secondC1').value;
+        var lon2 = document.getElementById('secondC2').value;
+
+        var R = 6371000; // metres
+        var φ1 = toRad(lat1);
+        var φ2 = toRad(lat2);
+        var Δφ = toRad(lat2-lat1);
+        var Δλ = toRad(lon2-lon1);
+
+        var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                Math.cos(φ1) * Math.cos(φ2) *
+                Math.sin(Δλ/2) * Math.sin(Δλ/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        var d = R * c;
+        console.log('updateanswer' + d);
+        document.getElementById('answer').value = d;
+        //document.getElementById('address').innerHTML = str;
+      }
+      function toRad(Value) {
+    /** Converts numeric degrees to radians */
+    return Value * Math.PI / 180;
+}
+
+    </script>
+
+
+    <script>
+// This example adds a search box to a map, using the Google Place Autocomplete
+// feature. People can enter geographical searches. The search box will return a
+// pick list containing a mix of places and predicted search terms.
+
+
+
+
+
+function initAutocomplete() {
+  var i=0;
+  var marker;
+  var geocoder = new google.maps.Geocoder();
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -33.8688, lng: 151.2195},
+    zoom: 22,
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  });
+  //**update address here**//
+  var address = "120 Cobblestone Drive, Pittsburgh, PA";//"806 College St, Pittsburgh, PA 15232, USA";
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          map.setCenter(results[0].geometry.location);
+          marker = new google.maps.Marker({
+              map: map,
+              draggable: true,
+              position: results[0].geometry.location
+
+          });
+
+  marker.addListener('click', function() {
+
+  //console.log('ready');
+  //var latlong_value = results[0].geometry.location;
+  if(i==0){
+  //document.getElementById('address_field').value = address;
+  document.getElementById('firstC1').value = marker.getPosition().lat();
+  document.getElementById('firstC2').value = marker.getPosition().lng();
+  i++;
+  console.log(i);
+}
+
+
+  google.maps.event.addListener(marker, 'dragend', function() {
+    //updateMarkerStatus('Drag ended');
+
+
+
+    console.log('dragend');
+    document.getElementById('secondC1').value = marker.getPosition().lat();
+    document.getElementById('secondC2').value = marker.getPosition().lng();
+    //updateMarkerAddress(marker.getPosition());
+    ///geocodePosition(marker.getPosition());
+  });
+ });
+        } else {
+          alert("Geocode was not successful for the following reason: " + status);
+        }
+
+      });
+}
+
+//google.maps.event.addDomListener(window, 'load', initAutocomplete);
+
+function displayLocationElevation(location, elevator, infowindow) {
+  // Initiate the location request
+  elevator.getElevationForLocations({
+    'locations': [location]
+  }, function(results, status) {
+    infowindow.setPosition(location);
+    if (status === google.maps.ElevationStatus.OK) {
+      // Retrieve the first result
+      if (results[0]) {
+        // Open the infowindow indicating the elevation at the clicked position.
+        infowindow.setContent('The elevation at this point <br>is ' +
+            results[0].elevation + ' meters.');
+      } else {
+        infowindow.setContent('No results found');
+      }
+    } else {
+      infowindow.setContent('Elevation service failed due to: ' + status);
+    }
+  });
+}
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ015OnrjZ5Zrd9NSssSUBXzoE3c1MpLw&libraries=places&callback=initAutocomplete"
+         async defer></script>
+
+
+</script>>
+
+</script>
+
+  </body>
+</html>

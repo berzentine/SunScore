@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Street View side-by-side</title>
+    <style>
+    div.div1{background: #999; float: left; height: 100%; width: 210px; margin-right: 0px}
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map, #pano {
+        float: left;
+        height: 100%;
+        width: 41.8%;
+        margin-right:0px
+      }
+    </style>
+  </head>
+  <body>
+    <div class="div1" id="form">
+      <form action="#" margin-left:25px>
+        <br><br>
+        <b><i>***Please maximize the window for your ease. </i></b><br><br>
+          <b>Task 3: </b>You will be helping us find the height of the building. <br>Please input the relevant information for this task. <br>
+          <br>
+          <b>Instructions:</b><br>
+
+          <br>
+          House Address:<br>
+          <input type="text" name="address" id="address_field" size="40">
+          <br><br>
+
+          <b>Step 1:</b> Please rotate the street view on the right pane such that the yellow stick man in the left pane faces the red-marker. <br>
+          <br>
+         <br>
+         <b>Step 2:</b> Enter the number of floors of the building appearing in the right pane and press calculate.<br>
+         <br># of Floors:<br>
+         <input type="text" name="nofloors" id="nofloors">
+         <br>
+         <br>
+         <button type="button" id='Calculate'>Calculate</button>
+         <br><br>
+         Answer(in meters):
+         <input type="text" value="answer" id="answer"><br><br>
+
+
+          <input type="submit" value="Submit">
+  </form>
+
+    </div>
+    <div id="map"></div>
+    <div id="pano"></div>
+    <script>
+document.getElementById("Calculate").onclick = function() {updateanswer(document.getElementById('nofloors').value)};
+function updateanswer(floor) {
+
+document.getElementById('answer').value = floor;
+
+}
+function initialize() {
+  var geocoder = new google.maps.Geocoder();
+  var lat1,lng1,marker;
+  var fenway; //just a house_address variable that stores the coordinates for the address we are searching for. Basically after geocoding an address, the results are stored in fenway
+  //alert("Geocode was successful for the following reason: " + status +lat1 + lng1);
+
+  var address = "806 College St, Pittsburgh, PA 15232, USA";
+
+  geocoder.geocode( { 'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+
+      lat1 = results[0].geometry.location.lat();
+      lng1 = results[0].geometry.location.lng();
+      //alert("Geocode was successful for the following reason: " + status +lat1 + lng1);
+      fenway = {lat: parseFloat(lat1), lng: parseFloat(lng1)};
+      document.getElementById('address_field').value = address;
+      mapcall(fenway);
+
+      //alert("Geocode was successful for the following reason: " + status +lat1 + lng1);
+    }
+    else {
+      alert("Geocode was not successful for the following reason: " + status);
+    }
+  });
+
+}
+
+function mapcall(fenway) {
+var marker;
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: fenway,
+    mapTypeId: google.maps.MapTypeId.SATELLITE,
+    zoom: 22
+  });
+  marker = new google.maps.Marker({
+      map: map,
+      draggable: false,
+      position: fenway
+
+  });
+  var panorama = new google.maps.StreetViewPanorama(
+      document.getElementById('pano'), {
+        position: fenway,
+        pov: {
+          heading: 34,
+          pitch: 10
+        }
+      });
+  map.setStreetView(panorama);
+
+}
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxYs1fAQbzJc6WpfYlK7JbguOz0xMDf8A&signed_in=true&callback=initialize">
+    </script>
+  </body>
+</html>

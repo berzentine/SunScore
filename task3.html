@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Street View side-by-side</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map, #pano {
+        float: left;
+        height: 100%;
+        width: 45%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="pano"></div>
+    <script>
+
+/*    function initAutocomplete() {
+      var marker;
+      var geocoder = new google.maps.Geocoder();
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: -33.8688, lng: 151.2195},
+        zoom: 22,
+        mapTypeId: google.maps.MapTypeId.SATELLITE
+      });
+      //**update address here**/
+/*      var address = "806 College St, Pittsburgh, PA 15232, USA";
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+        marker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            position: results[0].geometry.location
+
+        });
+
+marker.addListener('click', function() {
+
+console.log('ready');
+//var latlong_value = results[0].geometry.location;
+document.getElementById('address_field').value = address;
+document.getElementById('firstC1').value = results[0].geometry.location.lat();
+document.getElementById('firstC2').value = results[0].geometry.location.lng();
+
+
+
+
+google.maps.event.addListener(marker, 'dragend', function() {
+  //updateMarkerStatus('Drag ended');
+  console.log('dragend');
+  document.getElementById('secondC1').value = marker.getPosition().lat();
+  document.getElementById('secondC2').value = marker.getPosition().lng();
+  //updateMarkerAddress(marker.getPosition());
+  ///geocodePosition(marker.getPosition());
+});
+});
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+
+    });
+
+*/
+function initialize() {
+  var marker;
+  var geocoder = new google.maps.Geocoder();
+
+var lat1,lng1;
+
+  var address = "806 College St, Pittsburgh, PA 15232, USA";
+
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          map.setCenter(results[0].geometry.location);
+          marker = new google.maps.Marker({
+              map: map,
+              draggable: true,
+              position: results[0].geometry.location
+
+          });
+
+
+  lat1 = results[0].geometry.location.lat();
+  lng1 = results[0].geometry.location.lng();
+
+
+        }
+        else {
+          alert("Geocode was not successful for the following reason: " + status);
+        }
+
+      });
+
+  var house_address = {lat: lat1, lng: lng1};
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: house_address,
+    mapTypeId: google.maps.MapTypeId.SATELLITE,
+    zoom: 22
+  });
+
+
+  var panorama = new google.maps.StreetViewPanorama(
+      document.getElementById('pano'), {
+        position: house_address,
+        pov: {
+          heading: 34,
+          pitch: 10
+        }
+      });
+  map.setStreetView(panorama);
+}
+
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxYs1fAQbzJc6WpfYlK7JbguOz0xMDf8A&signed_in=true&callback=initialize">
+    </script>
+  </body>
+</html>
