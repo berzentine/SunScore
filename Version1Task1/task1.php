@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <style>
     div.box { background: #EEE; height: 100%; width: 100%; }
-    div.div1{background: #999; float: left; height: 260%; width: 300px; }
+    div.div1{background: #999; float: left; height: 270%; width: 300px; }
     div.div2{ background: #666; height: 150%; }
     div.clear { clear: both; height: 1px; overflow: hidden; font-size:0pt; margin-top: -1px; }
       html, body {
@@ -14,7 +14,7 @@
         padding: 0;
       }
       #map {
-        height: 260%;
+        height: 270%;
       }
       form {
         margin: 0px;
@@ -179,8 +179,8 @@ $conn->close();
     <div class="box">
        <div class="div1" id="form">
        <form method="post" action="#" margin-left:25px>
-           <br><br>
-           <b>This would display the token once you finish the task:</b><br>
+           <br><br>You need to <u>input all fields</u> in order to complete the task and get rewarded. Incase of no answer <u>input 0</u>. Also donot append 'meters' to the value in the text boxes. Only input numbers.
+           <b>Displays the token once you finish the task:</b><br>
            <input type="text" name ="tokendisplay" id="tokendisplay" value="This would display the token once you finish the task">
 
            <br><br>Where is the marked-house located?<br>
@@ -452,6 +452,7 @@ function initAutocomplete() {
           document.write(window.localStorage.getItem('token') +" is you token you need to submit.");
 
         alert("Task done !  "+ window.localStorage.getItem('token') +" is your token key");
+        localStorage.clear();
         }
         else{
         alert("Geocode was not successful for the following reason: " + status);
