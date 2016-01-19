@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <style>
     div.box { background: #EEE; height: 100%; width: 100%; }
-    div.div1{background: #999; float: left; height: 200%; width: 300px; }
+    div.div1{background: #999; float: left; height: 260%; width: 300px; }
     div.div2{ background: #666; height: 150%; }
     div.clear { clear: both; height: 1px; overflow: hidden; font-size:0pt; margin-top: -1px; }
       html, body {
@@ -14,7 +14,7 @@
         padding: 0;
       }
       #map {
-        height: 200%;
+        height: 260%;
       }
       form {
         margin: 0px;
@@ -86,15 +86,36 @@ if ($conn->connect_error) {
         $lngObs=$_POST["secondC2"];
         $ans=$_POST["answer"];
          $temp_address=$_POST["address"];
-         //echo  ;
+         //(xyz', 'xyz',$latObs,$lngObs, $ans, 'north','north','north','north',3.5,3.5,3.5,3.5,'yes','xyz','xyz')";
+//marker_direction, obs_type, Lat_of_obs, Long_of_obs, ans , mcq_north, mcq_south, mcq_East, mcq_West, North_D, South_D, East_D, West_D, Obs_around_step, website_token, user_id
          $ids=$_POST["id"];
+         $typesetting = $_POST["house_setting"];
+         $markerdirection = $_POST["direction"];
+         $obstruction = $_POST["obstruction"];
+         $north = $_POST["north_dense"];
+         $south = $_POST["south_dense"];
+         $east = $_POST["east_dense"];
+         $west = $_POST["west_dense"];
 
-$sql = "INSERT INTO TestData (Id,Address, Lat_of_house, Long_of_house, Lat_of_obs, Long_of_obs, ans ) VALUES ($ids, '$temp_address', $latHouse, $lngHouse,$latObs,$lngObs, $ans)";
+         $e1 = $_POST["e1"];
+         $e2 = $_POST["e2"];
+         $e3 = $_POST["e3"];
+         $e4 = $_POST["e4"];
+         $obsmcq = $_POST["obs_mcq"];
+         $token = $_POST["token"];
+         //echo $token."here is the token";
+         //logic is i m generating a token, which is stored in the form and local storage both, and then the php form uses that to store the value
+
+
+
+//$sql = "INSERT INTO TestData (Id,Address, Lat_of_house, Long_of_house, Lat_of_obs, Long_of_obs, ans ) VALUES ($ids, '$temp_address', $latHouse, $lngHouse,$latObs,$lngObs, $ans)";
+$sql = "INSERT INTO TestData (Id, Setting, Address, Lat_of_house, Long_of_house, marker_direction, obs_type, Lat_of_obs, Long_of_obs, ans , mcq_north, mcq_south, mcq_East, mcq_West, North_D, South_D, East_D, West_D, Obs_around_step, website_token, user_id ) VALUES ($ids, '$typesetting', '$temp_address', $latHouse, $lngHouse,'$markerdirection', '$obstruction',$latObs,$lngObs, $ans, '$north','$sorth','$east','$west',$e1,$e2,$e3,$e4,'$obsmcq','$token','xyz')";
+
 
 if ($conn->query($sql) === TRUE) {
     echo "New record created successfully";
 } else {
-  //  echo "Error: " . $sql . "<br>" . $conn->error;
+  //echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
 $conn->close();
@@ -147,7 +168,7 @@ if ($result->num_rows > 0) {
 }
 
 //print_r($id_array);
-print_r($address_array);
+//print_r($address_array);
 
 $conn->close();
 ?>
@@ -159,9 +180,12 @@ $conn->close();
        <div class="div1" id="form">
        <form method="post" action="#" margin-left:25px>
            <br><br>
+           <b>This would display the token once you finish the task:</b><br>
+           <input type="text" name ="tokendisplay" id="tokendisplay" value="This would display the token once you finish the task">
+
            <br><br>Where is the marked-house located?<br>
-           <input type="radio" name="house_setting" >Urban setting<br>
-           <input type="radio" name="house_setting" >Rural/Suburban setting<br><br>
+           <input type="radio" name="house_setting" value="Urban">Urban setting<br>
+           <input type="radio" name="house_setting" value="Rural">Rural/Suburban setting<br><br>
 
 
              <b>Task 1: </b>Finding the distance of the obstruction from the house.<br>
@@ -174,75 +198,82 @@ $conn->close();
              House Coordinates(Lat):<br>
              <input type="hidden" name ="address" id="address">
              <input type="hidden" name ="id" id="id">
+             <input type="hidden" name ="token" id="token">
 
-             <input type="text" name="firstC1" required id="firstC1">
+
+
+             <input type="text" name="firstC1" id="firstC1">
              <br>
              House Coordinates(Long):<br>
-            <input type="text" name="firstC2" required id="firstC2">
+            <input type="text" name="firstC2" id="firstC2">
             <br>
             <br>
             <b>Step 3:</b>Considering the building center as the center of the compass, which is the direction where you placed the marker in step 2? Note that the North is facing the top. East is on the right of the map<br>
-            <input type="radio" name="direction" >N
-            <input type="radio" name="direction" >E
-            <input type="radio" name="direction" >W
-            <input type="radio" name="direction" >S
-            <input type="radio" name="direction" >NE
-            <input type="radio" name="direction" >SE
-            <input type="radio" name="direction" >SW
-            <input type="radio" name="direction" >NW
+            <input type="radio" value="N" name="direction" >N
+            <input type="radio" value="E" name="direction" >E
+            <input type="radio" value="W" name="direction" >W
+            <input type="radio" value="S" name="direction" >S
+            <input type="radio" value="NE" name="direction" >NE
+            <input type="radio" value="SE" name="direction" >SE
+            <input type="radio" value="SW" name="direction" >SW
+            <input type="radio" value="NW" name="direction" >NW
 
             <br><br>
             <b>Step 4:</b>What was the obstruction you considered in step 2 ?<br>
-            <input type="radio" name="obstruction" >Tree
-            <input type="radio" name="obstruction" >Building/Apartment <br><br>
+            <input type="radio" name="obstruction" value="Tree" >Tree
+            <input type="radio" name="obstruction" value="Building">Building/Apartment <br><br>
 
 
             <b>Step 5:</b>Drag the marker on the obstructing object you considered in step 2. Place it on the point closest to the window. Click on the marker. The coordinates of the obstruction should be autofilled.<br>
             Obstruction Coordinates(Lat):<br>
-            <input type="text" name="secondC1" required id="secondC1">
+            <input type="text" name="secondC1"  id="secondC1">
             <br>
 
             Obstruction Coordinates(Long):<br>
-            <input type="text" name="secondC2"  required id="secondC2">
+            <input type="text" name="secondC2"  id="secondC2">
             <br><br>
             <button type="button" id='Calculate'>Calculate</button>
             Answer
-            <input  type="text" value="Press Calculate" name= "answer" required id="answer">
+            <input  type="text" value="Press Calculate" name= "answer"  id="answer">
             <br><br>How dense (in terms of obstructions) is the area on the North side adjacent to the house?<br>
-            <input type="radio" name="north_dense" >Sparse/None
-            <input type="radio" name="north_dense" >Middle
-            <input type="radio" name="north_dense" >Dense
-            Estimated distance from these obstructions to building?<br><br>
-            <input  type="text" value="Enter only value in meters" name= "e1" id="e1">
+            <input type="radio" name="north_dense" value="Sparse">Sparse/None
+            <input type="radio" name="north_dense" value="Middle">Middle
+            <input type="radio" name="north_dense" value="Dense">Dense<br>
+
+            Estimated distance from these obstructions to building in meters ?(Enter only value)<br><br>
+            <input  type="text" name= "e1" id="e1">
+
             <br><br>How dense (in terms of obstructions) is the area on the South side adjacent to the house?<br>
-            <input type="radio" name="south_dense" >Sparse/None
-            <input type="radio" name="south_dense" >Middle
-            <input type="radio" name="south_dense" >Dense
-            Estimated distance from these obstructions to building?<br><br>
-            <input  type="text" value="Enter only value in meters" name= "e2" id="e2">
+            <input type="radio" name="south_dense" value="Sparse" >Sparse/None
+            <input type="radio" name="south_dense" value="Middle">Middle
+            <input type="radio" name="south_dense" value="Dense">Dense<br>
+
+            Estimated distance from these obstructions to building in meters? (Enter only value)<br><br>
+            <input  type="text"  name= "e2" id="e2">
 
 
             <br><br>How dense (in terms of obstructions) is the area on the East side adjacent to the house?<br>
-            <input type="radio" name="east_dense" >Sparse/None
-            <input type="radio" name="east_dense" >Middle
-            <input type="radio" name="east_dense" >Dense
-            Estimated distance from these obstructions to building?<br><br>
-            <input  type="text" value="Enter only value in meters" name= "e3" id="e3">
+            <input type="radio" name="east_dense" value="Sparse">Sparse/None
+            <input type="radio" name="east_dense" value="Middle">Middle
+            <input type="radio" name="east_dense" value="Dense">Dense<br>
+
+            Estimated distance from these obstructions to building in meters? (Enter only value)<br><br>
+            <input  type="text" name= "e3" id="e3">
 
             <br><br>How dense (in terms of obstructions) is the area on the West side adjacent to the house?<br>
-            <input type="radio" name="west_dense" >Sparse/None
-            <input type="radio" name="west_dense" >Middle
-            <input type="radio" name="west_dense" >Dense
-            Estimated distance from these obstructions to building?<br><br>
-            <input  type="text" value="Enter only value in meters" name= "e4" id="e4">
+            <input type="radio" name="west_dense" value="Sparse" >Sparse/None
+            <input type="radio" name="west_dense" value="Middle">Middle
+            <input type="radio" name="west_dense" value="Dense">Dense<br>
+            Estimated distance from these obstructions to building in meters? (Enter only value)<br><br>
+            <input  type="text"  name= "e4" id="e4">
 
 
             <br><br>
 
 
             <b>Step 6:</b>Are there any obstructions around the house?<br>
-            <input type="radio" name="obs_mcq" >No
-            <input type="radio" name="obs_mcq" >Yes
+            <input type="radio" value="No" name="obs_mcq" >No
+            <input type="radio" value="Yes" name="obs_mcq" >Yes
 
               <br><br>
 	<button id="submitBtn" onclick="myfunction();">Submit</button>
@@ -265,6 +296,11 @@ $conn->close();
 
 	if(!window.localStorage['count']){
 		window.localStorage.setItem('count', 0);
+    var token = generatetoken();
+    document.getElementById('token').value = token;
+
+    window.localStorage.setItem('token', token);
+    //console.log(token+"is thisblacnk");
              //window.localStorage['count']=0
          }
     document.getElementById("Calculate").onclick = function() {updateanswer()};
@@ -272,11 +308,13 @@ $conn->close();
 
 
       function updateanswer() {
-        console.log('updateanswer');
+
+        //console.log('updateanswer');
         var lat1 = document.getElementById('firstC1').value;
         var lon1 = document.getElementById('firstC2').value;
         var lat2 = document.getElementById('secondC1').value;
         var lon2 = document.getElementById('secondC2').value;
+
 
         var R = 6371000; // metres
         var φ1 = toRad(lat1);
@@ -300,7 +338,25 @@ $conn->close();
 }
 
 
+
+
+
+function generatetoken(){
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+  for( var i=0; i < 10; i++ )
+    {  text += possible.charAt(Math.floor(Math.random() * possible.length));}
+    //document.getElementById(token).value = text;
+    //console.log(text+"here is the token");
+      return text;
+}
+
+
+
+
 function myfunction(){
+  //console.log("mufunction called");
   if(window.localStorage.getItem('count')<5){
     var index = window.localStorage.getItem('count');
     index++;
@@ -313,7 +369,10 @@ function myfunction(){
 
 
 function initAutocomplete() {
-
+  //console.log("initi called");
+  //document.getElementById('token').value = token;
+//  if(window.localStorage['token']){
+//document.getElementById(token).value = window.localStorage.getItem('token');}
   var i=0;
   //var j=0;
   var marker;
@@ -323,6 +382,11 @@ function initAutocomplete() {
     zoom: 22,
     mapTypeId: google.maps.MapTypeId.SATELLITE
   });
+
+
+  if(window.localStorage['count']){
+		document.getElementById('token').value = window.localStorage.getItem('token');
+         }
 
 
  if(window.localStorage.getItem('count')<5){
@@ -382,16 +446,12 @@ function initAutocomplete() {
       }
       else{
         if(window.localStorage.getItem('count')==5){
-          var text = "";
-          var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+          var y = document.getElementById("tokendisplay");
+          document.getElementById("tokendisplay").value = window.localStorage.getItem('token');
+          y.type= "text";
+          document.write(window.localStorage.getItem('token') +" is you token you need to submit.");
 
-          for( var i=0; i < 10; i++ )
-              text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-          //return text;
-
-        //generate a token here which i need to input there.
-        alert("task done  "+text+" is your special key");
+        alert("Task done !  "+ window.localStorage.getItem('token') +" is your token key");
         }
         else{
         alert("Geocode was not successful for the following reason: " + status);
