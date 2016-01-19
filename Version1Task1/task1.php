@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <style>
     div.box { background: #EEE; height: 100%; width: 100%; }
-    div.div1{background: #999; float: left; height: 270%; width: 300px; }
+    div.div1{background: #999; float: left; height: 290%; width: 300px; }
     div.div2{ background: #666; height: 150%; }
     div.clear { clear: both; height: 1px; overflow: hidden; font-size:0pt; margin-top: -1px; }
       html, body {
@@ -14,7 +14,7 @@
         padding: 0;
       }
       #map {
-        height: 270%;
+        height: 290%;
       }
       form {
         margin: 0px;
@@ -114,6 +114,7 @@ $sql = "INSERT INTO TestData (Id, Setting, Address, Lat_of_house, Long_of_house,
 
 if ($conn->query($sql) === TRUE) {
     echo "New record created successfully";
+    //increase count only here
 } else {
   //echo "Error: " . $sql . "<br>" . $conn->error;
 }
@@ -141,7 +142,7 @@ if ($conn->connect_error) {
 }
 //$sql = "(select * from listings WHERE address NOT LIKE 'None' order by id limit 200)";
 
-$sql = "select * from (select * from listings WHERE address NOT LIKE 'None' order by id limit 50) as rows  order by rand() limit 5 ";
+$sql = "select * from (select * from listings WHERE address NOT LIKE 'None' order by id limit 50) as rows  order by rand() limit 3 ";
 //orders first 300 in ascnding order and then pics the random 10 from this.
 
 $result = $conn->query($sql);
@@ -179,7 +180,7 @@ $conn->close();
     <div class="box">
        <div class="div1" id="form">
        <form method="post" action="#" margin-left:25px>
-           <br><br>You need to <u>input all fields</u> in order to complete the task and get rewarded. Incase of no answer <u>input 0</u>. Also donot append 'meters' to the value in the text boxes. Only input numbers.
+           <br><br>You need to <u>input all fields</u> in order to complete the task and get rewarded. Incase of no answer <u>input 0. Also donot append 'meters' to the value in the text boxes. </u>Only input numbers. On completing a task, the message "Recorded successfully" is displayed on the top of the window.
            <b>Displays the token once you finish the task:</b><br>
            <input type="text" name ="tokendisplay" id="tokendisplay" value="This would display the token once you finish the task">
 
@@ -357,7 +358,7 @@ function generatetoken(){
 
 function myfunction(){
   //console.log("mufunction called");
-  if(window.localStorage.getItem('count')<5){
+  if(window.localStorage.getItem('count')<3){
     var index = window.localStorage.getItem('count');
     index++;
     window.localStorage.setItem('count', index);
@@ -389,7 +390,7 @@ function initAutocomplete() {
          }
 
 
- if(window.localStorage.getItem('count')<5){
+ if(window.localStorage.getItem('count')<3){
   //**update address here**//
   //var address = ["1104 Kenzie Drive, Pittsburgh, PA","120 Cobblestone Drive, Pittsburgh, PA","806 College St, Pittsburgh, PA 15232, USA"];
       var index = window.localStorage.getItem('count')
@@ -445,7 +446,7 @@ function initAutocomplete() {
 
       }
       else{
-        if(window.localStorage.getItem('count')==5){
+        if(window.localStorage.getItem('count')==3){
           var y = document.getElementById("tokendisplay");
           document.getElementById("tokendisplay").value = window.localStorage.getItem('token');
           y.type= "text";
