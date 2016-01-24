@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <style>
     div.box { background: #EEE; height: 100%; width: 100%; }
-    div.div1{background: #999; float: left; height: 290%; width: 300px; }
+    div.div1{background: #FFF; float: left; height: 290%; width: 300px; }
     div.div2{ background: #666; height: 150%; }
     div.clear { clear: both; height: 1px; overflow: hidden; font-size:0pt; margin-top: -1px; }
       html, body {
@@ -14,7 +14,7 @@
         padding: 0;
       }
       #map {
-        height: 290%;
+        height: 100%;
       }
       form {
         margin: 0px;
@@ -142,7 +142,7 @@ if ($conn->connect_error) {
 }
 //$sql = "(select * from listings WHERE address NOT LIKE 'None' order by id limit 200)";
 
-$sql = "select * from (select * from listings WHERE address NOT LIKE 'None' order by id limit 50) as rows  order by rand() limit 3 ";
+$sql = "select * from (select * from listings WHERE address NOT LIKE 'None' order by id limit 20) as rows  order by rand() limit 3 ";
 //orders first 300 in ascnding order and then pics the random 10 from this.
 
 $result = $conn->query($sql);
@@ -180,7 +180,7 @@ $conn->close();
     <div class="box">
        <div class="div1" id="form">
        <form method="post" action="#" margin-left:25px>
-           <br><br>You need to <u>input all fields</u> in order to complete the task and get rewarded. Incase of no answer <u>input 0. Also donot append 'meters' to the value in the text boxes. </u>Only input numbers. On completing a task, the message "Recorded successfully" is displayed on the top of the window.
+           <br><br>You need to <u>input all fields</u> in order to complete the task and get rewarded. On completing a task, the message "Recorded successfully" is displayed on the top of the window.
            <b>Displays the token once you finish the task:</b><br>
            <input type="text" name ="tokendisplay" id="tokendisplay" value="This would display the token once you finish the task">
 
@@ -194,7 +194,10 @@ $conn->close();
              <b>Instructions:</b><br>
              <b>Step 1:</b> Zoom in to the maximum possible by clicking on the plus, on the bottom-right corner of the map. Do not rotate the default imagery.<br><br>
 
-             <b>Step 2:</b>Drag the marker to any of the marked-building's window which has an obstruction in front of it. In case the windows arent visible, drag the marker to the edge of the wall, such that it is in front of the obstruction. Obstruction can be trees or buildings. If there are no obstructions adjacent to the house, jump to step 6.<br>Else <b>click</b> on the marker and the coordinates of the place would be autofilled.<br>
+             <b>Step 2:</b>
+             <img style="width:100px;height:100px;" src="https://raw.githubusercontent.com/berzentine/SunScore/master/Version1Task1/Screen%20Shot%202016-01-24%20at%206.40.19%20pm.png">
+             <img style="width:100px;height:100px;" src="https://raw.githubusercontent.com/berzentine/SunScore/master/Version1Task1/Screen%20Shot%202016-01-24%20at%206.40.29%20pm.png">
+             <br>Drag the marker to any of the marked-building's window which has an obstruction(eg.(A and B)) in front of it. In case the windows arent visible, drag the marker to the edge of the wall (eg. B), such that it is in front of the obstruction. Obstruction can be trees(eg. A) or buildings(eg. B). If there are no obstructions adjacent to the house, fill all the fields with a 0 and jump to step 6.<br>Else <b>click</b> on the marker and the coordinates of the place would be autofilled.<br>
 
              House Coordinates(Lat):<br>
              <input type="hidden" name ="address" id="address">
@@ -209,7 +212,9 @@ $conn->close();
             <input type="text" name="firstC2" id="firstC2">
             <br>
             <br>
-            <b>Step 3:</b>Considering the building center as the center of the compass, which is the direction where you placed the marker in step 2? Note that the North is facing the top. East is on the right of the map<br>
+            <b>Step 3:</b>
+            <img src="https://raw.githubusercontent.com/berzentine/SunScore/master/Version1Task1/step3.gif" style="width:130px;height:100px;">
+            <br>Considering the building center as the center of the compass, in what direction did you placed the marker in step 2? <br>
             <input type="radio" value="N" name="direction" >N
             <input type="radio" value="E" name="direction" >E
             <input type="radio" value="W" name="direction" >W
@@ -225,32 +230,37 @@ $conn->close();
             <input type="radio" name="obstruction" value="Building">Building/Apartment <br><br>
 
 
-            <b>Step 5:</b>Drag the marker on the obstructing object you considered in step 2. Place it on the point closest to the window. Click on the marker. The coordinates of the obstruction should be autofilled.<br>
+            <b>Step 5:</b>
+            <img src="https://raw.githubusercontent.com/berzentine/SunScore/master/Version1Task1/Screen%20Shot%202016-01-24%20at%207.26.25%20pm.png" style="width:100px;height:100px;">
+            <br>Drag the marker on the obstructing object you considered in step 2(see Figure above).Place it on the point closest to the window. Click on the marker. The coordinates of the obstruction should be autofilled.<br>
             Obstruction Coordinates(Lat):<br>
             <input type="text" name="secondC1"  id="secondC1">
             <br>
 
             Obstruction Coordinates(Long):<br>
             <input type="text" name="secondC2"  id="secondC2">
-            <br><br>
+            <br><br>Press Calculate
             <button type="button" id='Calculate'>Calculate</button>
             Answer
+            
             <input  type="text" value="Press Calculate" name= "answer"  id="answer">
-            <br><br>How dense (in terms of obstructions) is the area on the North side adjacent to the house?<br>
+            <!--<img src="http://www.codeguru.com/imagesvr_ce/8590/directions.png" style="width:150px;height:150px;">-->
+            <br><br><b>Refer figure in step 3 for these questions. </b>
+            <br>How dense (in terms of obstructions) is the area on the North side adjacent to the house?<br>
             <input type="radio" name="north_dense" value="Sparse">Sparse/None
             <input type="radio" name="north_dense" value="Middle">Middle
             <input type="radio" name="north_dense" value="Dense">Dense<br>
 
-            Estimated distance from these obstructions to building in meters ?(Enter only value)<br><br>
-            <input  type="text" name= "e1" id="e1">
+            Estimated distance from these obstructions to building:<br><br>
+            <input  type="text" name= "e1" id="e1" value="0"> meters
 
             <br><br>How dense (in terms of obstructions) is the area on the South side adjacent to the house?<br>
             <input type="radio" name="south_dense" value="Sparse" >Sparse/None
             <input type="radio" name="south_dense" value="Middle">Middle
             <input type="radio" name="south_dense" value="Dense">Dense<br>
 
-            Estimated distance from these obstructions to building in meters? (Enter only value)<br><br>
-            <input  type="text"  name= "e2" id="e2">
+            Estimated distance from these obstructions to building:<br><br>
+            <input  type="text"  name= "e2" id="e2" value="0"> meters
 
 
             <br><br>How dense (in terms of obstructions) is the area on the East side adjacent to the house?<br>
@@ -258,15 +268,15 @@ $conn->close();
             <input type="radio" name="east_dense" value="Middle">Middle
             <input type="radio" name="east_dense" value="Dense">Dense<br>
 
-            Estimated distance from these obstructions to building in meters? (Enter only value)<br><br>
-            <input  type="text" name= "e3" id="e3">
+            Estimated distance from these obstructions to building:<br><br>
+            <input  type="text" name= "e3" id="e3" value="0"> meters
 
             <br><br>How dense (in terms of obstructions) is the area on the West side adjacent to the house?<br>
             <input type="radio" name="west_dense" value="Sparse" >Sparse/None
             <input type="radio" name="west_dense" value="Middle">Middle
             <input type="radio" name="west_dense" value="Dense">Dense<br>
-            Estimated distance from these obstructions to building in meters? (Enter only value)<br><br>
-            <input  type="text"  name= "e4" id="e4">
+            Estimated distance from these obstructions to building:<br><br>
+            <input  type="text"  name= "e4" id="e4" value="0"> meters
 
 
             <br><br>
@@ -344,9 +354,9 @@ $conn->close();
 
 function generatetoken(){
   var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-  for( var i=0; i < 10; i++ )
+  for( var i=0; i < 12; i++ )
     {  text += possible.charAt(Math.floor(Math.random() * possible.length));}
     //document.getElementById(token).value = text;
     //console.log(text+"here is the token");
