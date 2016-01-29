@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <style>
     div.box { background: #EEE; height: 100%; width: 100%; }
-    div.div1{background: #FFF; float: left; height: 290%; width: 300px; }
+    div.div1{background: #FFF; float: left; height: 100%; width: 300px; }
     div.div2{ background: #666; height: 150%; }
     div.clear { clear: both; height: 1px; overflow: hidden; font-size:0pt; margin-top: -1px; }
       html, body {
@@ -178,7 +178,8 @@ $conn->close();
   <!--  <input id="pac-input" class="controls" type="text" placeholder="Search Box">-->
 
     <div class="box">
-       <div class="div1" id="form">
+
+       <div class="div1" id="form" style="overflow-y:auto; overflow-x:hidden; height:400px; !important">
        <form method="post" action="#" margin-left:25px>
            <br><br>You need to <u>input all fields</u> in order to complete the task and get rewarded. On completing a task, the message "Recorded successfully" is displayed on the top of the window.
            <b>Displays the token once you finish the task:</b><br>
@@ -242,7 +243,7 @@ $conn->close();
             <br><br>Press Calculate
             <button type="button" id='Calculate'>Calculate</button>
             Answer
-            
+
             <input  type="text" value="Press Calculate" name= "answer"  id="answer">
             <!--<img src="http://www.codeguru.com/imagesvr_ce/8590/directions.png" style="width:150px;height:150px;">-->
             <br><br><b>Refer figure in step 3 for these questions. </b>
