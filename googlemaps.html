@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+
+      div.box { background: #EEE; height: 100%; width: 100%; }
+      div.div1{background: #999; float: left; height: 100%; width: 300px; }
+      div.div2{ background: #666; height: 100%; }
+      div.clear { clear: both; height: 1px; overflow: hidden; font-size:0pt; margin-top: -1px; }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+      function initialize() {
+        var mapCanvas = document.getElementById('map');
+        var mapOptions = {
+          center: new google.maps.LatLng(44.5403, -78.5463),
+          //zoom: 8,
+          center: {lat: -33.8688, lng: 151.2195},
+          zoom: 18,
+          //mapTypeId: google.maps.MapTypeId.SATELLITE
+          mapTypeId: google.maps.MapTypeId.SATELLITE
+        }
+        var map = new google.maps.Map(mapCanvas, mapOptions)
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+  <body>
+
+<div class="box">
+   <div class="div1" id="form">
+     <form action="#" margin-left:25px>
+         <b>Task 1: </b>You will be helping us to fnd the height of the obstruction in this task. <br>Please input the relevant information for this task. <br>
+         <br>
+         <b>Instructions:</b><br>
+         <b>Step 1:</b> Navigate using google maps to the actual location. Enter the house address in the field below. <br>
+         <br>
+         House Address:<br>
+         <input type="text" name="address">
+         <br><br>
+
+         <b>Step 2:</b> Click on the obstructing object (tree/building) and enter the coordinates in the fields below. The first coordinate is the latitude followed by longitude<br>
+        <br>
+         Obstruction Coordinates(Lat):<br>
+         <input type="text" name="firstC1">
+         <br>
+
+         Obstruction Coordinates(Long):<br>
+        <input type="text" name="firstC2">
+        <br>
+        <br>
+        <b>Step 3:</b> Click on a nearby street next to the building and enter the coordinates in the fields below. The first coordinate is the latitude followed by longitude<br>
+        <br>
+        Street Coordinates(Lat):<br>
+        <input type="text" name="secondC1">
+        <br>
+
+        Street Coordinates(Long):<br>
+        <input type="text" name="secondC2">
+        <br><br>
+        <input type="submit" value="Submit">
+
+ </form>
+   </div>
+   <div class="div2" id="map"></div>
+   <div class="clear">
+</div>
+
+
+
+
+
+
+  </body>
+</html>
