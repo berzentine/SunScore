@@ -78,7 +78,6 @@
 
 
     <?php
-    echo "Hello";
     $servername = "learnlabs.in:3306";
     $username = "learndrx_nidhi";
     $password = "worldpeace";
@@ -156,10 +155,10 @@ if ($conn->connect_error) {
 }
 //$sql = "(select * from listings WHERE address NOT LIKE 'None' order by id limit 200)";
 
-//$sql = "select * from (select * from listings WHERE address NOT LIKE 'None' order by id limit 15) as rows  order by rand() limit 3 ";
+$sql = "select * from (select * from listings WHERE address NOT LIKE 'None' order by id limit 15) as rows  order by rand() limit 3 ";
 //orders first 300 in ascnding order and then pics the random 10 from this.
-$sql = "select * from (select * from listings WHERE address NOT LIKE 'None' order by id limit 10) as rows  order by id limit 10 ";
-//$sql = "select * FROM (SELECT * FROM listings WHERE id = 1253 or id = 1252 or id = 1240 or id = 1239 or id = 1236 or id = 1229 or id = 71 or id = 108 or id = 169) as rows order by rand() limit 5";
+//$sql = "select * from (select * from listings WHERE address NOT LIKE 'None' order by id limit 10) as rows  order by id limit 10 ";
+
 $result = $conn->query($sql);
 
 
@@ -177,14 +176,12 @@ if ($result->num_rows > 0) {
         $address_array[$i] = $b;
         $i++;
     }
-    echo "</table>";
-    echo "$id_array"
+   // echo "</table>";
+   // echo "$id_array"
 } else {
     echo "0 results";
 }
 
-//$address_array = array("100 Academy Ave,Pittsburgh, PA", "624 West Ave, Pittsburgh, PA", "811 Florence Avenue,Pittsburgh, PA","");
-//$id_array = array("169", "108", "71","1253","1252","1240","1239","1236","1229");
 //print_r($id_array);
 //print_r($address_array);
 
