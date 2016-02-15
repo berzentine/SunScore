@@ -119,7 +119,7 @@ if ($conn->connect_error) {
 
 
 //$sql = "INSERT INTO TestData (Id,Address, Lat_of_house, Long_of_house, Lat_of_obs, Long_of_obs, ans ) VALUES ($ids, '$temp_address', $latHouse, $lngHouse,$latObs,$lngObs, $ans)";
-$sql = "INSERT INTO TestData (Id, Setting, Address, Lat_of_house, Long_of_house, marker_direction, obs_type, Lat_of_obs, Long_of_obs, ans , mcq_north, mcq_south, mcq_East, mcq_West, North_D, South_D, East_D, West_D, Obs_around_step, website_token, user_id ) VALUES ($ids, '$typesetting', '$temp_address', $latHouse, $lngHouse,'$markerdirection', '$obstruction',$latObs,$lngObs, $ans, '$north','$south','$east','$west',$e1,$e2,$e3,$e4,'$obsmcq','$token','xyz')";
+$sql = "INSERT INTO TestData2 (Id, Setting, Address, Lat_of_house, Long_of_house, marker_direction, obs_type, Lat_of_obs, Long_of_obs, ans , mcq_north, mcq_south, mcq_East, mcq_West, North_D, South_D, East_D, West_D, Obs_around_step, website_token, user_id ) VALUES ($ids, '$typesetting', '$temp_address', $latHouse, $lngHouse,'$markerdirection', '$obstruction',$latObs,$lngObs, $ans, '$north','$south','$east','$west',$e1,$e2,$e3,$e4,'$obsmcq','$token','xyz')";
 
 
 if ($conn->query($sql) === TRUE) {
@@ -443,7 +443,7 @@ function myfunction(){
   //console.log('updateanswer' + d);
   document.getElementById('answer').value = d;
   //console.log("mufunction called");
-  if(window.localStorage.getItem('count')<3){
+  if(window.localStorage.getItem('count')<5){
     var index = window.localStorage.getItem('count');
     index++;
     window.localStorage.setItem('count', index);
@@ -466,6 +466,7 @@ function initAutocomplete() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -33.8688, lng: 151.2195},
     zoom: 22,
+    tilt:0,
     mapTypeId: google.maps.MapTypeId.SATELLITE
   });
 
@@ -475,7 +476,7 @@ function initAutocomplete() {
          }
 
 
- if(window.localStorage.getItem('count')<3){
+ if(window.localStorage.getItem('count')<5){
   //**update address here**//
   //var address = ["1104 Kenzie Drive, Pittsburgh, PA","120 Cobblestone Drive, Pittsburgh, PA","806 College St, Pittsburgh, PA 15232, USA"];
       var index = window.localStorage.getItem('count')
@@ -531,7 +532,7 @@ function initAutocomplete() {
 
       }
       else{
-        if(window.localStorage.getItem('count')==3){
+        if(window.localStorage.getItem('count')==5){
           var y = document.getElementById("tokendisplay");
           document.getElementById("tokendisplay").value = window.localStorage.getItem('token');
           y.type= "text";
